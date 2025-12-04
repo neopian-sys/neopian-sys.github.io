@@ -1,3 +1,5 @@
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +10,52 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 
   <style>
+    /* --------------------
+       NAV TAB STYLES
+       -------------------- */
+    .top-nav {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      margin-top: 0.8rem;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .top-nav a.tab {
+      font-family: 'Press Start 2P', monospace;
+      background: #fff;
+      color: #0000a0;
+      text-decoration: none;
+      padding: 6px 10px;
+      display: inline-block;
+      border-radius: 4px;
+      box-shadow: 1px 1px 0 #666 inset;
+      transition: transform .06s ease, background .12s ease, color .12s ease;
+    }
+
+    .top-nav a.tab:focus,
+    .top-nav a.tab:hover {
+      background: #ffc;
+      color: #0000a0;
+      text-decoration: underline;
+      transform: translateY(-1px);
+    }
+
+    .top-nav a.tab.active {
+      background: var(--accent, #000080);
+      color: #fff;
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    @media (max-width: 420px) {
+      .top-nav { gap: 0.4rem; }
+      .top-nav a.tab { padding: 6px 8px; font-size: .78rem; }
+    }
+
+    /* --------------------
+       SITE STYLES (your original)
+       -------------------- */
     body {
       font-family: 'VT323', monospace;
       background: #0000a0;
@@ -17,6 +65,8 @@
       max-width: 900px;
       line-height: 1.6;
       font-size: 18px;
+      /* Apply cursor */
+      cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur114.cur'), default;
     }
 
     h1, h2 {
@@ -70,124 +120,161 @@
     }
 
     @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-      h1 {
-        font-size: 1.2rem;
-      }
-      h2 {
-        font-size: 1rem;
-      }
+      body { padding: 10px; }
+      h1 { font-size: 1.2rem; }
+      h2 { font-size: 1rem; }
     }
+
     section p a {
-  display: inline-block;
-  font-family: 'Press Start 2P', monospace;
-  color: #fff;
-  background: #000080;
-  padding: 6px 10px;
-  text-decoration: none;
-  box-shadow: 2px 2px 0 #000;
-  margin: 0.5em 0;
-  transition: all 0.2s ease;
-}
+      display: inline-block;
+      font-family: 'Press Start 2P', monospace;
+      color: #fff;
+      background: #000080;
+      padding: 6px 10px;
+      text-decoration: none;
+      box-shadow: 2px 2px 0 #000;
+      margin: 0.5em 0;
+      transition: all 0.2s ease;
+    }
 
-section p a:hover {
-  background: #ffc;
-  color: #000080;
-  box-shadow: 2px 2px 0 #666;
-}
-    /* Apply to the whole site */
-body {
-  cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur114.cur'), default;
-}
+    section p a:hover {
+      background: #ffc;
+      color: #000080;
+      box-shadow: 2px 2px 0 #666;
+    }
 
-/* Classic pointing hand for links */
-a, button {
-  cursor: url('https://cur.cursors-4u.net/cursors/cur-3/cur248.cur'), pointer;
-}
+    /* Classic pointing hand for links */
+    a, button {
+      cursor: url('https://cur.cursors-4u.net/cursors/cur-3/cur248.cur'), pointer;
+    }
   </style>
+
+  <!-- NAV ACTIVE SCRIPT: marks nav tab as active automatically or via body[data-active] -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        const nav = document.querySelector('.top-nav');
+        if (!nav) return;
+
+        // Auto mark active by pathname match
+        const path = location.pathname.replace(/\/$/, '').toLowerCase(); // trim trailing slash
+        nav.querySelectorAll('a.tab').forEach(a=>{
+          const href = a.getAttribute('href') || '';
+          const norm = (new URL(href, location.origin)).pathname.replace(/\/$/, '').toLowerCase();
+          if (norm === path) {
+            a.classList.add('active');
+          }
+        });
+
+        // Allow manual override using <body data-active="blog">
+        const override = document.body && document.body.getAttribute && document.body.getAttribute('data-active');
+        if (override) {
+          nav.querySelectorAll('a.tab').forEach(a=>{
+            a.classList.toggle('active', a.dataset.nav === override);
+          });
+        }
+      } catch(e) { /* fail silently */ }
+    });
+  </script>
 </head>
+
 <body>
   <main>
     <header>
-  <h1>Sydney Reis</h1>
-  <p>Is a geopolitics and emerging technology researcher and artist.</p>
-  <p>She is currently a PhD student in Computer Science at the 
-    <a href="https://www.cs.ox.ac.uk/people/sydney.reis/" target="_blank" rel="noopener noreferrer">University of Oxford</a> 
-    and Head of Research Fellowship at the 
-    <a href="https://www.oxfordchinapolicylab.com/meet-ocpl-fellows" target="_blank" rel="noopener noreferrer">Oxford China Policy Lab</a>. 
-    Previously, she was an Innovation Officer at NATO, Gender Consultant at UNDP Rwanda, and Policy Analyst at the Government of Canada, where she worked on responsible and ethical technology policy.
-  </p>
-  <p>Her research interests lie in understanding incentives, motivations, and aptitude for designing responsible technology, especially in dual-use and military technology companies. Using participatory design principles, her doctoral thesis seeks to develop a tool that will introduce geopolitics into scholarly and practical approaches to responsible innovation.</p>
-  <p>Her philosophical interests relate to how geopolitics is constructed by technology and how technology constructs geopolitics in turn. Current and critical inspiration includes Sheila Jasanoff, Lucy Suchman, Susan Strange, and Carlota Perez.</p>
-  <p>Sydney holds a BA in Political Science from Western University and an MA in International Affairs from Carleton University. She is hopelessly addicted to 
-    <a href="https://www.wolfsonrowing.org/committees" target="_blank" rel="noopener noreferrer">rowing</a> and 
-    <a href="https://en.wikipedia.org/wiki/Wikipedia:Unusual_articles" target="_blank" rel="noopener noreferrer">Wikipedia</a>.
-  </p>
-  <p><em>Based in Oxford, UK and someplace in the Canadian wilderness.</em></p>
-</header>
+      <h1>Sydney Reis</h1>
+      <p>Is a geopolitics and emerging technology researcher and artist.</p>
 
-<section>
-  <h2>Research</h2>
+      <!-- Top navigation tabs -->
+      <nav class="top-nav" aria-label="Main navigation">
+        <a class="tab" href="/index.html" data-nav="home">Home</a>
+        <a class="tab" href="/about.html" data-nav="about">About</a>
+        <a class="tab" href="/research.html" data-nav="research">Research</a>
+        <a class="tab" href="/writing.html" data-nav="writing">Writing</a>
+        <!-- BLOG TAB -->
+        <a class="tab" href="/blog/index.html" data-nav="blog">Blog</a>
+        <a class="tab" href="mailto:sydney.reis@wolfson.ox.ac.uk" data-nav="contact">Contact</a>
+      </nav>
 
-<p>
-  <a href="https://arxiv.org/abs/2511.17331" target="_blank" rel="noopener noreferrer">
-    AI Workers, Geopolitics, and Algorithmic Collective Action
-  </a>.
-  Presented at the 
-  <a href="https://neurips.cc/virtual/2025/loc/san-diego/workshop/109567" target="_blank" rel="noopener noreferrer">
-    NeurIPS Workshop on ACA
-  </a>.
-</p>
+      <p>She is currently a PhD student in Computer Science at the
+        <a href="https://www.cs.ox.ac.uk/people/sydney.reis/" target="_blank" rel="noopener noreferrer">University of Oxford</a>
+        and Head of Research Fellowship at the
+        <a href="https://www.oxfordchinapolicylab.com/meet-ocpl-fellows" target="_blank" rel="noopener noreferrer">Oxford China Policy Lab</a>.
+        Previously, she was an Innovation Officer at NATO, Gender Consultant at UNDP Rwanda, and Policy Analyst at the Government of Canada, where she worked on responsible and ethical technology policy.
+      </p>
+      <p>Her research interests lie in understanding incentives, motivations, and aptitude for designing responsible technology, especially in dual-use and military technology companies. Using participatory design principles, her doctoral thesis seeks to develop a tool that will introduce geopolitics into scholarly and practical approaches to responsible innovation.</p>
+      <p>Her philosophical interests relate to how geopolitics is constructed by technology and how technology constructs geopolitics in turn. Current and critical inspiration includes Sheila Jasanoff, Lucy Suchman, Susan Strange, and Carlota Perez.</p>
+      <p>Sydney holds a BA in Political Science from Western University and an MA in International Affairs from Carleton University. She is hopelessly addicted to
+        <a href="https://www.wolfsonrowing.org/committees" target="_blank" rel="noopener noreferrer">rowing</a> and
+        <a href="https://en.wikipedia.org/wiki/Wikipedia:Unusual_articles" target="_blank" rel="noopener noreferrer">Wikipedia</a>.
+      </p>
+      <p><em>Based in Oxford, UK and someplace in the Canadian wilderness.</em></p>
+    </header>
 
-  <h2>Writing</h2>
+    <section>
+      <h2>Research</h2>
 
-  <p>
-    <a href="https://emergingthreats.co.uk/paper-strategic-considerations-for-brain-computer-interface-military-rd/" target="_blank" rel="noopener noreferrer">
-      Expert Paper: Strategic Considerations for Brain-Computer Interface Military R&D
-    </a>
-  </p>
+      <p>
+        <a href="https://arxiv.org/abs/2511.17331" target="_blank" rel="noopener noreferrer">
+          AI Workers, Geopolitics, and Algorithmic Collective Action
+        </a>.
+        Presented at the
+        <a href="https://neurips.cc/virtual/2025/loc/san-diego/workshop/109567" target="_blank" rel="noopener noreferrer">
+          NeurIPS Workshop on ACA
+        </a>.
+      </p>
 
-  <p>
-    <a href="https://www.nato.int/docu/review/articles/2024/05/30/healthier-cleaner-greener-a-nato-strategy-for-the-coming-bio-revolution/index.html" target="_blank" rel="noopener noreferrer">
-      Healthier, cleaner, greener: a NATO strategy for the coming bio-revolution
-    </a>
-  </p>
+      <h2>Writing</h2>
 
-  <p>
-    <a href="https://mdfpng.com/research-on-the-measures-adopted-by-the-papua-new-guinean-government-in-support-of-womens-rights/" target="_blank" rel="noopener noreferrer">
-      Measures Adopted by the Papua New Guinean Government in Support of Women's Rights
-    </a>
-  </p>
+      <p>
+        <a href="https://aigi.ox.ac.uk/publications/ai-benefit-sharing-framework-balancing-access-and-safety/" target="_blank" rel="noopener noreferrer">
+          AI Benefit-Sharing Framework: Balancing Access and Safety
+        </a>
+      </p>
 
-  <p>
-    <a href="https://macleans.ca/society/technology/what-you-should-know-about-digital-foreign-interference/" target="_blank" rel="noopener noreferrer">
-      What You Should Know About Digital Foreign Interference
-    </a>
-  </p>
+      <p>
+        <a href="https://emergingthreats.co.uk/paper-strategic-considerations-for-brain-computer-interface-military-rd/" target="_blank" rel="noopener noreferrer">
+          Expert Paper: Strategic Considerations for Brain-Computer Interface Military R&D
+        </a>
+      </p>
 
-  <p>
-    <a href="https://macdonaldlaurier.ca/files/pdf/20190820_MLI_Digital_Foreign_Interference_WILNER_PAPER_FWeb.pdf" target="_blank" rel="noopener noreferrer">
-      The Threat of Digital Foreign Interference: Past, Present, and Future
-    </a>
-  </p>
+      <p>
+        <a href="https://www.nato.int/docu/review/articles/2024/05/30/healthier-cleaner-greener-a-nato-strategy-for-the-coming-bio-revolution/index.html" target="_blank" rel="noopener noreferrer">
+          Healthier, cleaner, greener: a NATO strategy for the coming bio-revolution
+        </a>
+      </p>
 
-  <p>
-    <a href="https://uwo.scholaris.ca/items/affb3525-ea43-4597-b5ac-4d2a5d541682" target="_blank" rel="noopener noreferrer">
-      Frida Kahlo: The Complexity of Being
-    </a>
-  </p>
-</section>
+      <p>
+        <a href="https://mdfpng.com/research-on-the-measures-adopted-by-the-papua-new-guinean-government-in-support-of-womens-rights/" target="_blank" rel="noopener noreferrer">
+          Measures Adopted by the Papua New Guinean Government in Support of Women's Rights
+        </a>
+      </p>
+
+      <p>
+        <a href="https://macleans.ca/society/technology/what-you-should-know-about-digital-foreign-interference/" target="_blank" rel="noopener noreferrer">
+          What You Should Know About Digital Foreign Interference
+        </a>
+      </p>
+
+      <p>
+        <a href="https://macdonaldlaurier.ca/files/pdf/20190820_MLI_Digital_Foreign_Interference_WILNER_PAPER_FWeb.pdf" target="_blank" rel="noopener noreferrer">
+          The Threat of Digital Foreign Interference: Past, Present, and Future
+        </a>
+      </p>
+
+      <p>
+        <a href="https://uwo.scholaris.ca/items/affb3525-ea43-4597-b5ac-4d2a5d541682" target="_blank" rel="noopener noreferrer">
+          Frida Kahlo: The Complexity of Being
+        </a>
+      </p>
+    </section>
 
     <footer>
       <p>
-        <a href="mailto:sydney.reis@wolfson.ox.ac.uk">email</a> · 
-        <a href="https://www.linkedin.com/in/sydneyreis/" target="_blank">linkedin</a> · 
+        <a href="mailto:sydney.reis@wolfson.ox.ac.uk">email</a> ·
+        <a href="https://www.linkedin.com/in/sydneyreis/" target="_blank">linkedin</a> ·
         <a href="https://www.are.na/sydney-reis/channels" target="_blank">are.na</a>
       </p>
     </footer>
   </main>
 </body>
 </html>
-
