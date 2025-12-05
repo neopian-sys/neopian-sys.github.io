@@ -1,12 +1,221 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Blog</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blog — Sydney Reis</title>
+
+  <!-- Retro fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #e9edf5;          /* pale 90s window background */
+      --panel: #f6f7fb;       /* window interior */
+      --accent: #000080;      /* deep blue accent */
+      --ink: #001;            /* near-black text */
+      --muted: #666;
+      --bevel1: #ffffff;      /* highlight */
+      --bevel2: #bfc7d9;      /* shadow */
+      --card-bg: #ffffff;
+    }
+
+    /* Page */
+    html,body{
+      height:100%;
+      margin:0;
+    }
+    body{
+      font-family: 'VT323', monospace;
+      background: linear-gradient(180deg, var(--bg), #f0f3fb 60%);
+      color: var(--ink);
+      padding:28px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Center column */
+    .wrapper{
+      max-width:920px;
+      margin:0 auto;
+    }
+
+    /* 90s window */
+    .window{
+      background: var(--panel);
+      border: 1px solid var(--bevel2);
+      box-shadow:
+        3px 3px 0 rgba(0,0,0,0.06);
+      border-radius:6px;
+      overflow:hidden;
+      margin-bottom:20px;
+    }
+
+    .titlebar{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 12px;
+      background: linear-gradient(180deg,#dfe6f6,#e9eefc);
+      border-bottom: 1px solid var(--bevel2);
+      box-shadow: inset 0 1px 0 var(--bevel1);
+      font-family: 'Press Start 2P', monospace;
+      color: var(--accent);
+      font-size:0.95rem;
+      letter-spacing:1px;
+    }
+
+    .controls{
+      display:flex;
+      gap:8px;
+      margin-right:6px;
+    }
+    .control{
+      width:12px;
+      height:12px;
+      border-radius:2px;
+      display:inline-block;
+      text-align:center;
+      line-height:12px;
+      font-size:9px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 0 rgba(0,0,0,0.05);
+      background: linear-gradient(180deg,#fff,#ddd);
+    }
+    .control.close{ background: linear-gradient(180deg,#ffd6d6,#ffbdbd); }
+    .control.max{ background: linear-gradient(180deg,#fff9c8,#fff2a6); }
+    .control.min{ background: linear-gradient(180deg,#d6f7d6,#bfeebb); }
+
+    .title{
+      flex:1;
+      font-size:0.9rem;
+      text-transform:uppercase;
+    }
+
+    .window-body{
+      padding:18px;
+    }
+
+    /* Post list */
+    .posts{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .post{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      background: var(--card-bg);
+      border:1px solid var(--bevel2);
+      padding:12px 14px;
+      border-radius:6px;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+    }
+
+    .post .meta{
+      min-width:120px;
+      font-size:0.82rem;
+      color:var(--muted);
+      text-align:left;
+      line-height:1.1;
+    }
+
+    .post h3{
+      margin:0 0 6px 0;
+      font-family: 'Press Start 2P', monospace;
+      font-size:1rem;
+      color:var(--accent);
+      text-transform:none;
+      letter-spacing:0.6px;
+    }
+
+    .post p.excerpt{
+      margin:0;
+      color:#222;
+      font-family: 'VT323', monospace;
+      font-size:0.95rem;
+    }
+
+    .post-actions{
+      margin-left:auto;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .btn{
+      display:inline-block;
+      font-family:'Press Start 2P',monospace;
+      font-size:0.78rem;
+      text-decoration:none;
+      padding:8px 10px;
+      border-radius:4px;
+      background:#fff;
+      color:var(--accent);
+      border:1px solid var(--bevel2);
+      box-shadow: inset 0 1px 0 var(--bevel1);
+    }
+    .btn:hover, .btn:focus{
+      background: linear-gradient(180deg,#fff8d9,#fff2a6);
+      outline: none;
+      text-decoration: none;
+    }
+
+    /* small screens: stack */
+    @media (max-width:640px){
+      .post{ flex-direction:column; align-items:flex-start; gap:10px; }
+      .post .meta{ min-width:0; }
+      .post-actions{ width:100%; justify-content:flex-end; }
+    }
+
+    /* subtle divider */
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, rgba(0,0,0,0.02), rgba(0,0,0,0.05));
+      margin:12px 0;
+    }
+
+    /* accessibility focus */
+    a:focus { outline:3px solid rgba(0,0,160,0.12); outline-offset:3px; }
+  </style>
 </head>
 <body>
-  <h1>Blog</h1>
-  <p>Your blog is working! Now add posts here.</p>
-  <p><a href="ai-workers-geopolitical-actors.html">AI Workers Are Becoming Geopolitical Actors</a></p>
+  <div class="wrapper">
+    <div class="window" role="region" aria-label="Blog list">
+      <div class="titlebar">
+        <div class="controls" aria-hidden="true">
+          <span class="control min">•</span>
+          <span class="control max">◻</span>
+          <span class="control close">✕</span>
+        </div>
+        <div class="title">Blog</div>
+        <div style="font-size:0.8rem;color:var(--muted)">simple • retro • readable</div>
+      </div>
+
+      <div class="window-body">
+        <p style="margin:0 0 10px 0; color:var(--muted); font-family: 'VT323', monospace;">
+          Welcome — recent posts below. Click a post to read.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="posts" id="posts">
+          <!-- Example post card -->
+          <article class="post">
+            <div class="meta">2025 · Research note</div>
+            <div>
+              <h3><a href="ai-workers-geopolitical-actors.html" style="text-decoration:none;color:inherit;">AI Workers Are Becoming Geopolitical Actors</a></h3>
+            </div>
+            <div class="post-actions">
+              <a class="btn" href="ai-workers-geopolitical-actors.html">Read</a>
+            </div>
+          </article>
+
+          <!-- Add more .post entries here for new posts -->
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
